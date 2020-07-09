@@ -39,6 +39,18 @@ public class MonetbilService implements MonetbilInterface {
 
     @Override
     public CheckPaymentResponse checkPayment(CheckPaymentRequest checkPaymentRequest, String url) {
-        return null;
+        LOGGER.info("check payment on url={} with params {}", url, checkPaymentRequest);
+        ResponseEntity<CheckPaymentResponse> responseEntity = null;
+        HttpEntity<CheckPaymentRequest> httpEntity = new HttpEntity<>(checkPaymentRequest);
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, CheckPaymentResponse.class);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("Message: {}", e.getMessage());
+        } catch (RestClientException e) {
+            LOGGER.error("{}", e.getMessage());
+        }
+        if (responseEntity == null || responseEntity.getBody() == null) return null;
+        return responseEntity.getBody();
     }
 }
