@@ -6,10 +6,10 @@ import com.hmd007.monetbill.model.response.CheckPaymentResponse;
 import com.hmd007.monetbill.model.response.PlacePaymentResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
@@ -41,7 +41,12 @@ public class MonetbilService implements MonetbilInterface {
     public CheckPaymentResponse checkPayment(CheckPaymentRequest checkPaymentRequest, String url) {
         LOGGER.info("check payment on url={} with params {}", url, checkPaymentRequest);
         ResponseEntity<CheckPaymentResponse> responseEntity = null;
-        HttpEntity<CheckPaymentRequest> httpEntity = new HttpEntity<>(checkPaymentRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
+        valueMap.add("paymentId", checkPaymentRequest.getPaymentId());
+
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<MultiValueMap<String, String>>(valueMap, headers);
         RestTemplate restTemplate = new RestTemplate();
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, CheckPaymentResponse.class);

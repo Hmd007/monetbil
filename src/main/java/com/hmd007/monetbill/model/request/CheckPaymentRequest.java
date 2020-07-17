@@ -8,4 +8,5 @@ import lombok.ToString;
 @AllArgsConstructor @NoArgsConstructor @Data @ToString
 public class CheckPaymentRequest {
     private String paymentId;
+    private String service;
 }

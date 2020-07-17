@@ -15,10 +15,13 @@ public class PlacePaymentRequest {
     private String notifyUrl;
     private String operator;
     private String currency;
+    /*
     @JsonAlias("item_ref")
     private String itemRef;
     @JsonAlias("payment_ref")
     private String paymentRef;
     private String country;
     private String email;
+
+     */
 }
